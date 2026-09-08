@@ -3,12 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
 <title>Goals Dashboard — 30-Day Athleticism Program</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
+  color-scheme:dark;
   --base:#0E141C;
   --surface:#151D27;
   --raised:#1B2632;
@@ -30,9 +32,8 @@
   --fc:'Barlow Condensed','Barlow',ui-sans-serif,system-ui,sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%}
+html,body{height:100%;background:var(--base)}
 body{
-  background:var(--base);
   color:var(--text);
   font-family:var(--fs);
   font-size:15px;
@@ -43,7 +44,6 @@ body{
     radial-gradient(circle at 88% 4%, rgba(255,106,31,.05), transparent 38%);
   background-attachment:fixed;
 }
-/* speckled rubber-floor texture, very quiet */
 body::before{
   content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
   background-image:
@@ -52,10 +52,46 @@ body::before{
   background-size:14px 14px, 31px 27px;
   background-position:0 0, 7px 11px;
 }
-button,input,select,textarea{font:inherit;color:inherit}
-button{background:none;border:none;cursor:pointer}
+button,input,select,textarea{font:inherit;color:inherit;background-color:transparent}
+button{border:none;cursor:pointer}
 :focus-visible{outline:2px solid var(--signal);outline-offset:2px;border-radius:3px}
 .num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+
+/* ============ SURFACE RESET =============================================
+   Nothing in this app may fall back to a user-agent white background or an
+   inherited black text colour. Every container that can carry a default
+   background is pinned transparent, and text colour is set explicitly at
+   the leaf rather than inherited from an ancestor that might be overridden.
+   ======================================================================== */
+table,thead,tbody,tfoot,tr,th,td,
+fieldset,legend,dl,dt,dd,figure,details,summary,
+input,select,textarea,option,optgroup{
+  background:transparent;
+  background-color:transparent;
+}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:12px;color:var(--text)}
+th{
+  text-align:left;font-size:12px;color:var(--muted);font-weight:600;padding:0 10px 8px 0;
+  border-bottom:1px solid var(--line);white-space:nowrap;background:transparent;
+}
+td{
+  padding:9px 10px 9px 0;border-bottom:1px solid var(--line-soft);
+  color:var(--text);font-variant-numeric:tabular-nums;background:transparent;
+}
+tbody tr{background:transparent}
+tbody tr:last-child td{border-bottom:none}
+td.mut,th.mut{color:var(--muted)}
+td.val{text-align:right;font-weight:600;color:var(--chalk)}
+td.valn{text-align:right;color:var(--text)}
+td.good{text-align:right;font-weight:600;color:var(--good)}
+td.bad{text-align:right;font-weight:600;color:var(--warn)}
+td.none{text-align:right;color:var(--dim)}
+@media (forced-colors: active){
+  table,th,td,tr,tbody,thead{background:transparent;forced-color-adjust:none}
+}
+@media print{
+  table,th,td{background:transparent !important;color:#111 !important}
+}
 
 /* ---------- shell ---------- */
 .app{position:relative;z-index:1;display:flex;min-height:100%}
@@ -70,21 +106,19 @@ button{background:none;border:none;cursor:pointer}
   display:grid;place-items:center;color:var(--signal);font-family:var(--fc);font-weight:700;font-size:19px;
   background:var(--signal-dim);
 }
-.brand h1{font-family:var(--fc);font-size:20px;font-weight:600;letter-spacing:.3px;line-height:1}
+.brand h1{font-family:var(--fc);font-size:20px;font-weight:600;letter-spacing:.3px;line-height:1;color:var(--chalk)}
 .brand p{font-size:11.5px;color:var(--dim);letter-spacing:.2px;margin-top:2px}
 .nav{display:flex;flex-direction:column;gap:2px}
 .nav button{
   display:flex;align-items:center;gap:11px;padding:9px 11px;border-radius:var(--r);
   color:var(--muted);font-size:14.5px;font-weight:500;text-align:left;width:100%;
-  transition:background .12s ease,color .12s ease;
+  transition:background .12s ease,color .12s ease;background:transparent;
 }
 .nav button:hover{background:var(--surface);color:var(--text)}
 .nav button[aria-current="page"]{background:var(--raised);color:var(--chalk);box-shadow:inset 2px 0 0 var(--signal)}
 .nav svg{width:17px;height:17px;flex:0 0 17px;stroke:currentColor;fill:none;stroke-width:1.7}
 .rail-foot{margin-top:auto;display:flex;flex-direction:column;gap:10px}
-.daychip{
-  border:1px solid var(--line);border-radius:var(--r);padding:11px 12px;background:var(--surface);
-}
+.daychip{border:1px solid var(--line);border-radius:var(--r);padding:11px 12px;background:var(--surface)}
 .daychip .k{font-size:11px;color:var(--dim);letter-spacing:.4px}
 .daychip .v{font-family:var(--fc);font-size:26px;line-height:1;color:var(--chalk);margin-top:3px}
 .daychip .v small{font-size:14px;color:var(--muted);font-family:var(--fs)}
@@ -92,7 +126,7 @@ button{background:none;border:none;cursor:pointer}
 .trackbar i{display:block;height:100%;background:var(--signal);border-radius:2px;transition:width .5s ease}
 .ghostbtn{
   border:1px solid var(--line);border-radius:var(--r);padding:8px 10px;color:var(--muted);
-  font-size:13px;font-weight:500;text-align:center;transition:border-color .12s,color .12s;
+  font-size:13px;font-weight:500;text-align:center;transition:border-color .12s,color .12s;background:transparent;
 }
 .ghostbtn:hover{border-color:var(--signal);color:var(--chalk)}
 
@@ -100,6 +134,7 @@ button{background:none;border:none;cursor:pointer}
 .screen{display:none;animation:fade .18s ease both}
 .screen.on{display:block}
 @keyframes fade{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.screen{animation:none}}
 
 .head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:20px;flex-wrap:wrap}
 .head h2{font-family:var(--fc);font-size:31px;font-weight:600;letter-spacing:.2px;line-height:1.05;color:var(--chalk)}
@@ -107,8 +142,8 @@ button{background:none;border:none;cursor:pointer}
 
 /* ---------- the wall (hero) ---------- */
 .wall{
-  border:1px solid var(--line);border-radius:var(--r);background:
-    linear-gradient(180deg,var(--surface),rgba(14,20,28,.6));
+  border:1px solid var(--line);border-radius:var(--r);
+  background:linear-gradient(180deg,var(--surface),rgba(14,20,28,.6));
   display:grid;grid-template-columns:minmax(220px,1fr) minmax(280px,1.35fr);gap:0;overflow:hidden;
 }
 .wall-read{padding:24px 26px;display:flex;flex-direction:column;justify-content:center;gap:2px}
@@ -132,7 +167,7 @@ button{background:none;border:none;cursor:pointer}
   display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-top:none;
   border-radius:0 0 var(--r) var(--r);background:var(--surface);
 }
-.strip .cell{padding:15px 18px;border-left:1px solid var(--line-soft)}
+.strip .cell{padding:15px 18px;border-left:1px solid var(--line-soft);background:transparent}
 .strip .cell:first-child{border-left:none}
 .strip .k{font-size:12px;color:var(--muted)}
 .strip .v{font-family:var(--fc);font-size:29px;line-height:1.1;color:var(--chalk);margin-top:1px}
@@ -157,17 +192,18 @@ button{background:none;border:none;cursor:pointer}
 .legend{display:flex;gap:16px;margin-top:12px;font-size:12px;color:var(--dim);flex-wrap:wrap}
 .legend i{width:10px;height:10px;border-radius:2px;display:inline-block;margin-right:6px;vertical-align:-1px}
 
-/* ---------- panels & grid ---------- */
+/* ---------- panels ---------- */
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
-.panel{border:1px solid var(--line);border-radius:var(--r);background:var(--surface);padding:18px 20px}
+.panel{border:1px solid var(--line);border-radius:var(--r);background:var(--surface);padding:18px 20px;color:var(--text)}
 .panel .phead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:4px}
 .panel .phead .meta{font-size:12.5px;color:var(--dim)}
+.panel p{color:var(--muted)}
 
 /* ---------- session ---------- */
 .sessbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
 .pill{
   border:1px solid var(--line);border-radius:20px;padding:6px 14px;font-size:13.5px;color:var(--muted);
-  font-weight:500;transition:.12s;
+  font-weight:500;transition:.12s;background:transparent;
 }
 .pill:hover{color:var(--chalk);border-color:var(--dim)}
 .pill[aria-pressed="true"]{background:var(--chalk);color:#0E141C;border-color:var(--chalk);font-weight:600}
@@ -181,11 +217,11 @@ button{background:none;border:none;cursor:pointer}
 .tag.risk{background:rgba(240,180,41,.14);color:var(--warn)}
 .blockhead .hint{font-size:12.5px;color:var(--dim);margin-left:auto}
 
-.ex{display:flex;align-items:flex-start;gap:13px;padding:13px 2px;border-bottom:1px solid var(--line-soft)}
+.ex{display:flex;align-items:flex-start;gap:13px;padding:13px 2px;border-bottom:1px solid var(--line-soft);background:transparent}
 .ex:last-child{border-bottom:none}
 .tick{
   flex:0 0 21px;width:21px;height:21px;border:1.5px solid var(--dim);border-radius:4px;margin-top:2px;
-  display:grid;place-items:center;transition:.14s;
+  display:grid;place-items:center;transition:.14s;background:transparent;
 }
 .tick:hover{border-color:var(--chalk)}
 .tick svg{width:12px;height:12px;stroke:#0E141C;stroke-width:3;fill:none;opacity:0;transition:opacity .12s}
@@ -198,66 +234,65 @@ button{background:none;border:none;cursor:pointer}
 .excue{font-size:12.5px;color:var(--dim);margin-top:4px;line-height:1.45;max-width:70ch}
 .exright{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
 .prescr{font-family:var(--fc);font-size:20px;color:var(--chalk);white-space:nowrap}
-.restbtn{border:1px solid var(--line);border-radius:20px;padding:4px 11px;font-size:12.5px;color:var(--muted);white-space:nowrap}
+.restbtn{border:1px solid var(--line);border-radius:20px;padding:4px 11px;font-size:12.5px;color:var(--muted);white-space:nowrap;background:transparent}
 .restbtn:hover{border-color:var(--signal);color:var(--signal)}
 
 .sets{display:flex;gap:7px;margin-top:9px;flex-wrap:wrap}
 .setbox{display:flex;align-items:center;gap:4px;border:1px solid var(--line);border-radius:4px;padding:3px 6px;background:rgba(0,0,0,.2)}
 .setbox label{font-size:10.5px;color:var(--dim);width:13px}
 .setbox input{
-  width:44px;background:none;border:none;font-size:13.5px;font-weight:600;color:var(--chalk);text-align:center;
-  font-variant-numeric:tabular-nums;
+  width:44px;background:transparent;border:none;font-size:13.5px;font-weight:600;color:var(--chalk);
+  text-align:center;font-variant-numeric:tabular-nums;
 }
 .setbox input::placeholder{color:#3E4B57;font-weight:400}
 .setbox .x{color:var(--dim);font-size:12px}
 .setbox.filled{border-color:rgba(255,106,31,.45);background:var(--signal-dim)}
 
 .counter{display:flex;align-items:center;gap:0;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;width:fit-content}
-.counter button{padding:6px 13px;font-size:16px;color:var(--muted);line-height:1}
+.counter button{padding:6px 13px;font-size:16px;color:var(--muted);line-height:1;background:transparent}
 .counter button:hover{background:var(--raised);color:var(--chalk)}
 .counter .val{padding:6px 14px;font-family:var(--fc);font-size:20px;color:var(--chalk);border-left:1px solid var(--line);border-right:1px solid var(--line);min-width:56px;text-align:center}
 
 .sessfoot{display:flex;align-items:center;gap:14px;margin-top:26px;padding-top:18px;border-top:1px solid var(--line);flex-wrap:wrap}
 .btn{
   background:var(--signal);color:#150800;font-weight:600;font-size:14.5px;padding:10px 20px;border-radius:var(--r);
-  transition:filter .12s;
+  transition:filter .12s;border:1px solid var(--signal);
 }
 .btn:hover{filter:brightness(1.1)}
-.btn.sec{background:none;border:1px solid var(--line);color:var(--muted)}
+.btn.sec{background:transparent;border:1px solid var(--line);color:var(--muted)}
 .btn.sec:hover{border-color:var(--chalk);color:var(--chalk);filter:none}
+.btn.danger{background:transparent;border:1px solid rgba(255,106,31,.4);color:var(--signal)}
+.btn.danger:hover{border-color:var(--signal);filter:none}
 .ring{--p:0;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;flex:0 0 46px;
-  background:conic-gradient(var(--signal) calc(var(--p)*1%), var(--line) 0);}
+  background:conic-gradient(var(--signal) calc(var(--p)*1%), var(--line) 0)}
 .ring i{width:38px;height:38px;border-radius:50%;background:var(--base);display:grid;place-items:center;
   font-size:12px;font-weight:700;color:var(--chalk);font-style:normal;font-variant-numeric:tabular-nums}
 
 /* ---------- charts ---------- */
-.chart{width:100%;height:190px;display:block;margin-top:6px;overflow:visible}
+.chart{width:100%;height:190px;display:block;margin-top:6px;overflow:visible;background:transparent}
 .chart .grid{stroke:var(--line-soft);stroke-width:1}
 .chart .axis{fill:var(--dim);font-size:10.5px;font-family:var(--fs)}
 .chart .ln{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .chart .dot{stroke:var(--base);stroke-width:1.5}
+.chartkey{display:flex;gap:14px;margin-top:8px;font-size:12px;color:var(--muted)}
+.chartkey i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:6px}
 .empty{
   border:1px dashed var(--line);border-radius:var(--r);padding:26px 20px;text-align:center;color:var(--dim);
-  font-size:13.5px;margin-top:10px;line-height:1.6;
+  font-size:13.5px;margin-top:10px;line-height:1.6;background:transparent;
 }
 .empty b{display:block;color:var(--muted);font-size:14.5px;font-weight:600;margin-bottom:4px}
 
-/* ---------- tables & forms ---------- */
-table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:12px}
-th{
-  text-align:left;font-size:12px;color:var(--muted);font-weight:600;padding:0 10px 8px 0;
-  border-bottom:1px solid var(--line);white-space:nowrap;
-}
-td{padding:9px 10px 9px 0;border-bottom:1px solid var(--line-soft);color:var(--text);font-variant-numeric:tabular-nums}
-tbody tr:last-child td{border-bottom:none}
-td.mut{color:var(--muted)}
+/* ---------- forms ---------- */
 .form{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:14px}
 .field label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}
 .field input,.field select,.field textarea{
   width:100%;background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:4px;padding:9px 10px;
-  font-size:14px;color:var(--chalk);font-variant-numeric:tabular-nums;
+  font-size:14px;color:var(--chalk);font-variant-numeric:tabular-nums;color-scheme:dark;
 }
+.field input::placeholder{color:#4A5865}
+.field select option{background:var(--raised);color:var(--chalk)}
 .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--signal);outline:none}
+.field input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.55;cursor:pointer}
 .field .help{font-size:11.5px;color:var(--dim);margin-top:4px}
 
 /* ---------- rest timer dock ---------- */
@@ -274,7 +309,7 @@ td.mut{color:var(--muted)}
   font-family:var(--fc);font-size:15px;color:var(--chalk);font-style:normal;font-variant-numeric:tabular-nums}
 .dock .lbl{font-size:13px;color:var(--muted);max-width:180px;line-height:1.35}
 .dock .lbl b{display:block;color:var(--chalk);font-size:13.5px;font-weight:600}
-.dock button{font-size:13px;color:var(--muted);padding:6px 10px;border:1px solid var(--line);border-radius:20px}
+.dock button{font-size:13px;color:var(--muted);padding:6px 10px;border:1px solid var(--line);border-radius:20px;background:transparent}
 .dock button:hover{color:var(--chalk);border-color:var(--dim)}
 
 .toast{
@@ -286,15 +321,16 @@ td.mut{color:var(--muted)}
 
 /* ---------- program reference ---------- */
 .acc{border:1px solid var(--line);border-radius:var(--r);background:var(--surface);margin-bottom:10px;overflow:hidden}
-.acc>button{width:100%;display:flex;align-items:center;gap:12px;padding:14px 18px;text-align:left}
+.acc>button{width:100%;display:flex;align-items:center;gap:12px;padding:14px 18px;text-align:left;background:transparent}
 .acc>button:hover{background:var(--raised)}
 .acc .idx{font-family:var(--fc);font-size:15px;color:var(--signal);width:22px;flex:0 0 22px}
 .acc .ttl{font-family:var(--fc);font-size:18px;color:var(--chalk);letter-spacing:.2px}
 .acc .cap{font-size:12.5px;color:var(--dim);margin-left:auto;text-align:right}
-.acc .body{padding:0 18px 18px;display:none}
+.acc .body{padding:0 18px 18px;display:none;color:var(--text)}
 .acc.open .body{display:block}
 .acc .chev{width:14px;height:14px;stroke:var(--dim);fill:none;stroke-width:2;transition:transform .16s}
 .acc.open .chev{transform:rotate(90deg)}
+.accnote{font-size:13px;color:var(--muted);margin-top:12px;line-height:1.6}
 .drill{padding:11px 0;border-bottom:1px solid var(--line-soft)}
 .drill:last-child{border-bottom:none}
 .drill .dn{font-weight:600;font-size:14.5px;color:var(--text)}
@@ -304,6 +340,10 @@ td.mut{color:var(--muted)}
 .callout{border-left:2px solid var(--warn);background:rgba(240,180,41,.06);padding:12px 15px;border-radius:0 4px 4px 0;
   font-size:13.5px;color:var(--muted);line-height:1.6;margin-top:14px}
 .callout b{color:var(--warn);font-weight:600}
+.callout.cool{border-left-color:var(--cool);background:rgba(69,200,222,.06)}
+.callout.cool b{color:var(--cool)}
+
+.rowactions{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
 
 /* ---------- mobile ---------- */
 .mobnav{display:none}
@@ -325,7 +365,7 @@ td.mut{color:var(--muted)}
     background:rgba(21,29,39,.96);backdrop-filter:blur(10px);border-top:1px solid var(--line);
     padding:6px 4px calc(6px + env(safe-area-inset-bottom));
   }
-  .mobnav button{display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 2px;color:var(--dim);font-size:10.5px;font-weight:600}
+  .mobnav button{display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 2px;color:var(--dim);font-size:10.5px;font-weight:600;background:transparent}
   .mobnav button[aria-current="page"]{color:var(--signal)}
   .mobnav svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.7}
   .dock{bottom:80px;left:12px;right:12px;transform:translateY(200%);width:auto}
@@ -333,6 +373,7 @@ td.mut{color:var(--muted)}
   .toast{bottom:150px}
   .ex{flex-wrap:wrap}
   .exright{width:100%;justify-content:flex-start;padding-left:34px}
+  table{font-size:13px}
 }
 </style>
 </head>
@@ -388,10 +429,10 @@ td.mut{color:var(--muted)}
         <p class="note" id="calNote">Thirty days, five sessions a week. Thursday is active recovery, Sunday is off.</p>
         <div class="cal" id="cal"></div>
         <div class="legend">
-          <span><i style="background:var(--signal)"></i>Session logged</span>
-          <span><i style="border:1px solid var(--line);background:repeating-linear-gradient(45deg,transparent,transparent 3px,rgba(255,255,255,.06) 3px,rgba(255,255,255,.06) 6px)"></i>Rest / recovery</span>
-          <span><i style="border:1px solid var(--chalk)"></i>Today</span>
-          <span><i style="border:1px solid var(--line)"></i>Missed or upcoming</span>
+          <span><i style="background:#FF6A1F"></i>Session logged</span>
+          <span><i style="border:1px solid #25313E;background:repeating-linear-gradient(45deg,transparent,transparent 3px,rgba(255,255,255,.06) 3px,rgba(255,255,255,.06) 6px)"></i>Rest / recovery</span>
+          <span><i style="border:1px solid #EEF3F7"></i>Today</span>
+          <span><i style="border:1px solid #25313E"></i>Missed or upcoming</span>
         </div>
       </div>
 
@@ -436,7 +477,7 @@ td.mut{color:var(--muted)}
       <div class="sessfoot">
         <button class="btn" id="saveSession">Save session</button>
         <button class="btn sec" id="clearSession">Clear today</button>
-        <span style="font-size:13px;color:var(--dim)" id="saveHint">Everything saves as you tap. This just marks the day done.</span>
+        <span style="font-size:13px;color:#5D6E7D" id="saveHint">Everything saves as you tap. This just marks the day done.</span>
       </div>
     </section>
 
@@ -473,7 +514,7 @@ td.mut{color:var(--muted)}
 
       <div class="panel">
         <h3>Add a reading</h3>
-        <p style="font-size:13px;color:var(--dim);margin-top:3px">Fill in what you measured. Blank fields are skipped, so a weight-only entry is fine.</p>
+        <p style="font-size:13px;color:#5D6E7D;margin-top:3px">Fill in what you measured. Blank fields are skipped, so a weight-only entry is fine.</p>
         <div class="form" id="measureForm">
           <div class="field"><label for="mDate">Date</label><input type="date" id="mDate"></div>
           <div class="field"><label for="mWeight">Body weight (kg)</label><input type="number" step="0.1" id="mWeight" placeholder="99.0"><div class="help">Morning, after the toilet</div></div>
@@ -484,7 +525,7 @@ td.mut{color:var(--muted)}
           <div class="field"><label for="mSleep">Sleep (h/night)</label><input type="number" step="0.5" id="mSleep" placeholder="—"></div>
           <div class="field"><label for="mEnergy">Energy (1–5)</label><select id="mEnergy"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
         </div>
-        <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+        <div class="rowactions">
           <button class="btn" id="addMeasure">Save reading</button>
           <button class="btn sec" id="markBaseline">Save as Day 0 baseline</button>
         </div>
@@ -540,18 +581,18 @@ td.mut{color:var(--muted)}
           <div class="field"><label for="setHeight">Height (cm)</label><input type="number" id="setHeight" placeholder="183"></div>
           <div class="field"><label for="setReach">Standing reach (cm)</label><input type="number" id="setReach" placeholder="—"><div class="help">Used to show jump touch height</div></div>
         </div>
-        <div style="margin-top:16px"><button class="btn" id="saveSettings">Save setup</button></div>
+        <div class="rowactions"><button class="btn" id="saveSettings">Save setup</button></div>
       </div>
       <div class="panel" style="margin-top:16px">
         <h3>Your data</h3>
-        <p style="font-size:13.5px;color:var(--muted);margin-top:6px;line-height:1.6">Export writes a JSON file you can keep or move to another device. Import replaces what is here now.</p>
-        <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
+        <p style="font-size:13.5px;color:#8496A6;margin-top:6px;line-height:1.6">Export writes a JSON file you can keep or move to another device. Import replaces what is here now.</p>
+        <div class="rowactions">
           <button class="btn sec" id="exportBtn">Export data</button>
           <button class="btn sec" id="importBtn">Import data</button>
           <input type="file" id="importFile" accept="application/json" hidden>
-          <button class="btn sec" id="resetBtn" style="border-color:rgba(255,106,31,.4);color:var(--signal)">Erase everything</button>
+          <button class="btn danger" id="resetBtn">Erase everything</button>
         </div>
-        <p style="font-size:12.5px;color:var(--dim);margin-top:12px" id="storeMode"></p>
+        <p style="font-size:12.5px;color:#5D6E7D;margin-top:12px" id="storeMode"></p>
       </div>
     </section>
 
@@ -737,7 +778,7 @@ const DAYS = {
   ]}
 };
 
-const SCHEDULE = {1:1, 2:2, 3:3, 4:"recovery", 5:4, 6:5, 0:"rest"}; // JS getDay(): 0=Sun
+const SCHEDULE = {1:1, 2:2, 3:3, 4:"recovery", 5:4, 6:5, 0:"rest"};
 
 const DRILLS = [
   {g:"Foundations — every week, Days 3 and 5", items:[
@@ -793,7 +834,6 @@ function esc(s){ return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",
 
 let saveTimer=null;
 function persist(){ clearTimeout(saveTimer); saveTimer=setTimeout(()=>Store.set(KEY,S),220); }
-
 function toast(msg){ const t=$("#toast"); t.textContent=msg; t.classList.add("on"); setTimeout(()=>t.classList.remove("on"),1900); }
 
 /* ============================================================
@@ -824,7 +864,7 @@ function go(tab){
   document.querySelectorAll("[data-tab]").forEach(b=>{
     if(b.dataset.tab===tab) b.setAttribute("aria-current","page"); else b.removeAttribute("aria-current");
   });
-  window.scrollTo({top:0,behavior:"instant"});
+  window.scrollTo(0,0);
   if(tab==="overview") renderOverview();
   if(tab==="today") renderToday();
   if(tab==="progress") renderProgress();
@@ -834,11 +874,11 @@ function go(tab){
 document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>go(b.dataset.go));
 
 /* ============================================================
-   CHARTS — hand-rolled SVG, no libraries
+   CHARTS
    ============================================================ */
 function lineChart(host, opts){
   const series = opts.series.filter(s=>s.data.length);
-  if(!series.length || series.every(s=>s.data.length<1)){
+  if(!series.length){
     host.innerHTML = `<div class="empty"><b>${esc(opts.emptyTitle||"Nothing logged yet")}</b>${esc(opts.emptyBody||"")}</div>`;
     return;
   }
@@ -849,14 +889,15 @@ function lineChart(host, opts){
   const range=max-min; min-=range*0.15; max+=range*0.15;
   const xs=[...new Set(all.map(d=>d.t))].sort((a,b)=>a-b);
   const t0=xs[0], t1=xs[xs.length-1]||t0+1;
-  const X=t=> padL + (t1===t0?0.5:( (t-t0)/(t1-t0) ))*(W-padL-padR);
+  const X=t=> padL + (t1===t0?0.5:((t-t0)/(t1-t0)))*(W-padL-padR);
   const Y=v=> padT + (1-(v-min)/(max-min))*(H-padT-padB);
+  const dp = opts.dp!==undefined? opts.dp : 0;
 
   let g="";
   for(let i=0;i<=3;i++){
     const y=padT+i*(H-padT-padB)/3, val=max-(i*(max-min)/3);
     g+=`<line class="grid" x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}"/>`;
-    g+=`<text class="axis" x="0" y="${y+3.5}">${val.toFixed(opts.dp!==undefined?opts.dp:0)}</text>`;
+    g+=`<text class="axis" x="0" y="${y+3.5}">${val.toFixed(dp)}</text>`;
   }
   let paths="",dots="",labels="";
   series.forEach(s=>{
@@ -865,17 +906,17 @@ function lineChart(host, opts){
       dots+=`<circle class="dot" cx="${X(pts[0].t)}" cy="${Y(pts[0].v)}" r="4" fill="${s.color}"><title>${esc(pts[0].label)}</title></circle>`;
     } else {
       const d=pts.map((p,i)=>(i?"L":"M")+X(p.t).toFixed(1)+" "+Y(p.v).toFixed(1)).join(" ");
-      paths+=`<path class="ln" d="${d}" stroke="${s.color}" ${s.dash?'stroke-dasharray="4 4"':""}/>`;
+      paths+=`<path class="ln" d="${d}" stroke="${s.color}"${s.dash?' stroke-dasharray="4 4"':""}/>`;
       pts.forEach(p=>{ dots+=`<circle class="dot" cx="${X(p.t)}" cy="${Y(p.v)}" r="3.2" fill="${s.color}"><title>${esc(p.label)}</title></circle>`; });
     }
     const last=pts[pts.length-1];
-    labels+=`<text class="axis" x="${Math.min(X(last.t)+7,W-padR-4)}" y="${Y(last.v)-8}" fill="${s.color}" style="font-weight:700;font-size:11.5px">${last.v.toFixed(opts.dp!==undefined?opts.dp:0)}</text>`;
+    labels+=`<text class="axis" x="${Math.min(X(last.t)+7,W-padR-4)}" y="${Y(last.v)-8}" fill="${s.color}" style="font-weight:700;font-size:11.5px">${last.v.toFixed(dp)}</text>`;
   });
-  const firstD=new Date(t0), lastD=new Date(t1);
-  const dl=d=>d.toLocaleDateString(undefined,{day:"numeric",month:"short"});
-  const axisX=`<text class="axis" x="${padL}" y="${H-6}">${dl(firstD)}</text><text class="axis" x="${W-padR}" y="${H-6}" text-anchor="end">${dl(lastD)}</text>`;
-  const key = series.length>1 ? `<div style="display:flex;gap:14px;margin-top:8px;font-size:12px;color:var(--muted)">`+
-    series.map(s=>`<span><i style="display:inline-block;width:9px;height:9px;border-radius:2px;background:${s.color};margin-right:6px"></i>${esc(s.name)}</span>`).join("")+`</div>` : "";
+  const dl=d=>new Date(d).toLocaleDateString(undefined,{day:"numeric",month:"short"});
+  const axisX=`<text class="axis" x="${padL}" y="${H-6}">${dl(t0)}</text><text class="axis" x="${W-padR}" y="${H-6}" text-anchor="end">${dl(t1)}</text>`;
+  const key = series.length>1
+    ? `<div class="chartkey">`+series.map(s=>`<span><i style="background:${s.color}"></i>${esc(s.name)}</span>`).join("")+`</div>`
+    : "";
   host.innerHTML=`<svg class="chart" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="${esc(opts.aria||"trend chart")}">${g}${paths}${dots}${labels}${axisX}</svg>${key}`;
 }
 
@@ -914,7 +955,6 @@ function renderWall(){
   }
 
   const scaleMax=Math.max(80, Math.ceil(((cur||40)+15)/10)*10);
-  const H=100;
   const yOf=v=> 100 - (v/scaleMax)*88 - 6;
   let ticks="";
   for(let v=0; v<=scaleMax; v+=5){
@@ -928,7 +968,7 @@ function renderWall(){
   const startY = (reduce||base===null)? curY : baseY;
 
   $("#wallVis").innerHTML=`
-  <svg viewBox="0 0 100 ${H}" preserveAspectRatio="none" aria-label="Vertical jump measured against a wall">
+  <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-label="Vertical jump measured against a wall">
     <defs><linearGradient id="fade" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0%" stop-color="rgba(238,243,247,.30)"/><stop offset="100%" stop-color="rgba(238,243,247,0)"/>
     </linearGradient></defs>
@@ -975,18 +1015,18 @@ function renderCal(){
   for(let i=1;i<=30;i++){
     const d=new Date(start.getTime()+(i-1)*86400000);
     const key=todayKey(d), dow=d.getDay(), sc=SCHEDULE[dow];
-    const rest = (sc==="rest"||sc==="recovery");
-    const done = !!S.sessions[key] && S.sessions[key].completed;
+    const rest=(sc==="rest"||sc==="recovery");
+    const done=!!S.sessions[key] && S.sessions[key].completed;
     const cls=["d"]; if(rest) cls.push("rest"); if(done) cls.push("done");
     if(i===idx) cls.push("today"); if(i<idx) cls.push("past");
-    const title = `Day ${i} · ${d.toLocaleDateString(undefined,{weekday:"short",day:"numeric",month:"short"})} · ${rest?(sc==="rest"?"Full rest":"Active recovery"):("Session "+sc)}${done?" · logged":""}`;
+    const title=`Day ${i} · ${d.toLocaleDateString(undefined,{weekday:"short",day:"numeric",month:"short"})} · ${rest?(sc==="rest"?"Full rest":"Active recovery"):("Session "+sc)}${done?" · logged":""}`;
     html+=`<div class="${cls.join(" ")}" title="${esc(title)}">${i}</div>`;
   }
   $("#cal").innerHTML=html;
   const w=weekNo();
-  $("#calNote").textContent = `Week ${w} — ${WEEK_RULES[w].name}. ${WEEK_RULES[w].note} Thursday is active recovery, Sunday is off.`;
-  $("#dayNum").textContent = Math.max(0,Math.min(30,idx));
-  $("#dayBar").style.width = Math.max(2,Math.min(100,(idx/30)*100))+"%";
+  $("#calNote").textContent=`Week ${w} — ${WEEK_RULES[w].name}. ${WEEK_RULES[w].note} Thursday is active recovery, Sunday is off.`;
+  $("#dayNum").textContent=Math.max(0,Math.min(30,idx));
+  $("#dayBar").style.width=Math.max(2,Math.min(100,(idx/30)*100))+"%";
 }
 
 function liftSeries(name,color){
@@ -1014,26 +1054,21 @@ function renderOverview(){
   lineChart($("#cPress"),{series:[liftSeries("leg press","#FF6A1F")],dp:0,
     emptyTitle:"No leg press logged",emptyBody:"Log a set on Day 1 or Day 5 and it appears here."});
 
-  const w=weekNo(), r=WEEK_RULES[w];
-  const start=parseKey(S.startDate);
-  let doneThisWeek=0;
-  for(let i=(w-1)*7+1;i<=w*7;i++){
-    const d=new Date(start.getTime()+(i-1)*86400000);
-    if(S.sessions[todayKey(d)] && S.sessions[todayKey(d)].completed) doneThisWeek++;
-  }
-  let contacts=0;
+  const w=weekNo(), r=WEEK_RULES[w], start=parseKey(S.startDate);
+  let doneThisWeek=0, contacts=0;
   for(let i=(w-1)*7+1;i<=w*7;i++){
     const d=new Date(start.getTime()+(i-1)*86400000), s=S.sessions[todayKey(d)];
+    if(s && s.completed) doneThisWeek++;
     if(s && s.contacts) contacts+=s.contacts;
   }
-  $("#weekMeta").textContent = "Week "+w+" · "+r.name;
+  $("#weekMeta").textContent="Week "+w+" · "+r.name;
   $("#weekSummary").innerHTML = `
     <table><tbody>
-      <tr><td class="mut">Sessions logged</td><td style="text-align:right;font-weight:600">${doneThisWeek} of 5</td></tr>
-      <tr><td class="mut">Main lifts</td><td style="text-align:right;font-weight:600">${r.main.sets} × ${r.main.reps}</td></tr>
-      <tr><td class="mut">Accessories</td><td style="text-align:right;font-weight:600">${r.acc.sets} sets</td></tr>
-      <tr><td class="mut">Effort</td><td style="text-align:right">${esc(r.rpe)}</td></tr>
-      <tr><td class="mut">Jump contacts logged</td><td style="text-align:right;font-weight:600">${contacts} <span class="mut" style="font-weight:400">/ ~${r.contacts} per session</span></td></tr>
+      <tr><td class="mut">Sessions logged</td><td class="val">${doneThisWeek} of 5</td></tr>
+      <tr><td class="mut">Main lifts</td><td class="val">${r.main.sets} × ${r.main.reps}</td></tr>
+      <tr><td class="mut">Accessories</td><td class="val">${r.acc.sets} sets</td></tr>
+      <tr><td class="mut">Effort</td><td class="valn">${esc(r.rpe)}</td></tr>
+      <tr><td class="mut">Jump contacts logged</td><td class="val">${contacts} <span style="color:#8496A6;font-weight:400">/ ~${r.contacts} per session</span></td></tr>
     </tbody></table>`;
 }
 
@@ -1070,15 +1105,15 @@ function currentSession(){
 function renderToday(){
   const sc=SCHEDULE[new Date().getDay()], w=weekNo(), sess=currentSession();
   if(S.ui.day) sess.day=S.ui.day;
-  const dayId = sess.day || scheduledDay() || 1;
-  sess.day = dayId;
+  const dayId=sess.day||scheduledDay()||1;
+  sess.day=dayId;
 
   const dayName=new Date().toLocaleDateString(undefined,{weekday:"long"});
   if(sc==="rest"){ $("#todayTitle").textContent="Sunday — full rest"; $("#todaySub").textContent="Sleep, eat, walk. You get stronger between sessions, not during them. If you want to train anyway, pick a day below."; }
   else if(sc==="recovery"){ $("#todayTitle").textContent="Thursday — active recovery"; $("#todaySub").textContent="Twenty to thirty minutes of easy walking or the recumbent bike, plus stretching. No lifting, no jumping. Shooting practice is fine."; }
   else { $("#todayTitle").textContent=`${dayName} — Day ${dayId}`; $("#todaySub").textContent=`${DAYS[dayId].name}. Week ${w}: ${WEEK_RULES[w].rpe}.`; }
 
-  $("#daySwitch").innerHTML = [1,2,3,4,5].map(i=>
+  $("#daySwitch").innerHTML=[1,2,3,4,5].map(i=>
     `<button class="pill" data-day="${i}" aria-pressed="${i===dayId}">Day ${i} · ${esc(DAYS[i].focus)}</button>`).join("");
   $("#daySwitch").querySelectorAll("button").forEach(b=>b.onclick=()=>{
     S.ui.day=Number(b.dataset.day); currentSession().day=S.ui.day; persist(); renderToday();
@@ -1087,22 +1122,22 @@ function renderToday(){
   const D=DAYS[dayId];
   let html="";
   D.blocks.forEach(bl=>{
-    const tag = bl.tag? `<span class="tag ${bl.tag}">${bl.tag==="jump"?"explosive":"movement"}</span>`:"";
+    const tag=bl.tag? `<span class="tag ${bl.tag}">${bl.tag==="jump"?"explosive":"movement"}</span>`:"";
     html+=`<div class="block"><div class="blockhead"><h4>${esc(bl.t)}</h4>${tag}${bl.hint?`<span class="hint">${esc(bl.hint)}</span>`:""}</div>`;
     bl.ex.forEach(ex=>{
-      const done = !!sess.done[ex.id];
-      const pres = prescriptionFor(ex,w);
-      const nSets = ex.log? setCountFor(ex,w):0;
+      const done=!!sess.done[ex.id];
+      const pres=prescriptionFor(ex,w);
+      const nSets=ex.log? setCountFor(ex,w):0;
       let sets="";
       if(ex.log && nSets){
         sets=`<div class="sets">`;
         for(let i=0;i<nSets;i++){
           const rec=(sess.sets[ex.id]&&sess.sets[ex.id][i])||{};
           const filled=(rec.w||rec.r)?" filled":"";
-          sets+=`<span class="setbox${filled}"><label>${i+1}</label>
-            <input type="number" inputmode="decimal" placeholder="kg" value="${rec.w!==undefined&&rec.w!==""?rec.w:""}" data-ex="${ex.id}" data-i="${i}" data-f="w" aria-label="Set ${i+1} weight">
-            <span class="x">×</span>
-            <input type="number" inputmode="numeric" placeholder="reps" value="${rec.r!==undefined&&rec.r!==""?rec.r:""}" data-ex="${ex.id}" data-i="${i}" data-f="r" aria-label="Set ${i+1} reps"></span>`;
+          sets+=`<span class="setbox${filled}"><label>${i+1}</label>`+
+            `<input type="number" inputmode="decimal" placeholder="kg" value="${rec.w!==undefined&&rec.w!==""?rec.w:""}" data-ex="${ex.id}" data-i="${i}" data-f="w" aria-label="Set ${i+1} weight">`+
+            `<span class="x">×</span>`+
+            `<input type="number" inputmode="numeric" placeholder="reps" value="${rec.r!==undefined&&rec.r!==""?rec.r:""}" data-ex="${ex.id}" data-i="${i}" data-f="r" aria-label="Set ${i+1} reps"></span>`;
         }
         sets+=`</div>`;
       }
@@ -1123,7 +1158,7 @@ function renderToday(){
     html+=`</div>`;
   });
 
-  const hasJump = D.blocks.some(b=>b.tag==="jump");
+  const hasJump=D.blocks.some(b=>b.tag==="jump");
   if(hasJump){
     html+=`<div class="block"><div class="blockhead"><h4>Jump contacts</h4><span class="tag jump">explosive</span>
       <span class="hint">Target about ${WEEK_RULES[w].contacts} this session</span></div>
@@ -1194,10 +1229,10 @@ let timer=null, tLeft=0, tTotal=0;
 function startRest(sec,name){
   tLeft=sec; tTotal=sec;
   $("#tname").textContent="Rest — "+name;
-  $("#tsub").textContent = sec>=90? "Full recovery. Explosive work needs it." : "Stay loose, breathe through the nose.";
+  $("#tsub").textContent= sec>=90? "Full recovery. Explosive work needs it." : "Stay loose, breathe through the nose.";
   $("#dock").classList.add("on");
   tick(); clearInterval(timer);
-  timer=setInterval(()=>{ tLeft--; tick(); if(tLeft<=0){ clearInterval(timer); $("#tname").textContent="Go"; $("#tsub").textContent="Next set."; setTimeout(()=>$("#dock").classList.remove("on"),2600);} },1000);
+  timer=setInterval(()=>{ tLeft--; tick(); if(tLeft<=0){ clearInterval(timer); $("#tname").textContent="Go"; $("#tsub").textContent="Next set."; setTimeout(()=>$("#dock").classList.remove("on"),2600); } },1000);
 }
 function tick(){
   $("#tval").textContent=Math.max(0,tLeft);
@@ -1222,13 +1257,13 @@ function renderProgress(){
   let rows="";
   keys.slice(0,14).forEach(k=>{
     const s=S.sessions[k], D=DAYS[s.day||1];
-    let total=0,done=0; D.blocks.forEach(b=>b.ex.forEach(e=>{total++; if(s.done[e.id])done++;}));
+    let total=0,done=0; D.blocks.forEach(b=>b.ex.forEach(e=>{ total++; if(s.done[e.id]) done++; }));
     let vol=0; Object.keys(s.sets||{}).forEach(id=>s.sets[id].forEach(st=>{ if(st&&st.w&&st.r) vol+=Number(st.w)*Number(st.r); }));
-    rows+=`<tr><td>${parseKey(k).toLocaleDateString(undefined,{day:"numeric",month:"short"})}</td>
+    rows+=`<tr><td class="valn" style="text-align:left">${parseKey(k).toLocaleDateString(undefined,{day:"numeric",month:"short"})}</td>
       <td class="mut">Day ${s.day} · ${esc(D.focus)}</td>
-      <td style="text-align:right">${Math.round(done/total*100)}%</td>
-      <td style="text-align:right">${s.contacts||0}</td>
-      <td style="text-align:right">${vol? Math.round(vol).toLocaleString()+" kg":"—"}</td></tr>`;
+      <td class="val">${Math.round(done/total*100)}%</td>
+      <td class="val">${s.contacts||0}</td>
+      <td class="val">${vol? Math.round(vol).toLocaleString()+" kg":"—"}</td></tr>`;
   });
   $("#pHist").innerHTML=`<table><thead><tr><th>Date</th><th>Session</th><th style="text-align:right">Done</th><th style="text-align:right">Contacts</th><th style="text-align:right">Volume</th></tr></thead><tbody>${rows}</tbody></table>`;
 }
@@ -1237,7 +1272,7 @@ function renderProgress(){
    MEASURE
    ============================================================ */
 function readForm(){
-  const g=id=>{const v=$(id).value.trim(); return v===""?null:Number(v);};
+  const g=id=>{ const v=$(id).value.trim(); return v===""?null:Number(v); };
   return { date:$("#mDate").value||todayKey(), weight:g("#mWeight"), waist:g("#mWaist"),
     vert:g("#mVert"), app:g("#mApp"), broad:g("#mBroad"), sleep:g("#mSleep"),
     energy:$("#mEnergy").value?Number($("#mEnergy").value):null };
@@ -1277,24 +1312,25 @@ function renderMeasure(){
   $("#cmpTable").innerHTML = `<table><thead><tr><th>Measure</th><th style="text-align:right">Day 0</th><th style="text-align:right">Now</th><th style="text-align:right">Change</th></tr></thead><tbody>`+
     fields.map(r=>{
       const b=baseVal(r.f), c=latest(r.f);
-      let ch='<td class="mut" style="text-align:right">—</td>';
+      let ch='<td class="none">—</td>';
       if(b!==null&&c!==null&&b!==c){
         const d=c-b, good = r.better==="down"? d<0 : d>0;
-        ch=`<td style="text-align:right;color:${good?"var(--good)":"var(--warn)"};font-weight:600">${d>0?"+":""}${d.toFixed(r.dp)}</td>`;
+        ch=`<td class="${good?"good":"bad"}">${d>0?"+":""}${d.toFixed(r.dp)}</td>`;
       }
-      return `<tr><td class="mut">${r.k}</td><td style="text-align:right">${b===null?"—":fmt(b,r.dp)+" "+r.u}</td><td style="text-align:right;font-weight:600">${c===null?"—":fmt(c,r.dp)+" "+r.u}</td>${ch}</tr>`;
+      return `<tr><td class="mut">${r.k}</td><td class="valn" style="text-align:right">${b===null?"—":fmt(b,r.dp)+" "+r.u}</td><td class="val">${c===null?"—":fmt(c,r.dp)+" "+r.u}</td>${ch}</tr>`;
     }).join("")+`</tbody></table>`;
 
   const ms=S.measures.slice().sort((a,b)=>parseKey(b.date)-parseKey(a.date));
   $("#mCount").textContent = ms.length? ms.length+" entries":"";
-  if(!ms.length){ $("#mTable").innerHTML=`<div class="empty"><b>Nothing logged yet</b>Start with your day 0 numbers: weight, waist and a vertical jump. Ten minutes now makes the next thirty days measurable.</div>`; }
-  else {
+  if(!ms.length){
+    $("#mTable").innerHTML=`<div class="empty"><b>Nothing logged yet</b>Start with your day 0 numbers: weight, waist and a vertical jump. Ten minutes now makes the next thirty days measurable.</div>`;
+  } else {
     $("#mTable").innerHTML=`<table><thead><tr><th>Date</th><th style="text-align:right">Weight</th><th style="text-align:right">Waist</th><th style="text-align:right">Vertical</th><th style="text-align:right">Approach</th><th style="text-align:right">Broad</th><th style="text-align:right">Sleep</th><th style="text-align:right">Energy</th><th></th></tr></thead><tbody>`+
-      ms.map(m=>`<tr><td>${parseKey(m.date).toLocaleDateString(undefined,{day:"numeric",month:"short"})}${S.baseline&&S.baseline.date===m.date?' <span style="color:var(--cool);font-size:11px">day 0</span>':""}</td>
-        <td style="text-align:right">${m.weight??"—"}</td><td style="text-align:right">${m.waist??"—"}</td>
-        <td style="text-align:right">${m.vert??"—"}</td><td style="text-align:right">${m.app??"—"}</td>
-        <td style="text-align:right">${m.broad??"—"}</td><td style="text-align:right">${m.sleep??"—"}</td>
-        <td style="text-align:right">${m.energy??"—"}</td>
+      ms.map(m=>`<tr><td class="valn" style="text-align:left">${parseKey(m.date).toLocaleDateString(undefined,{day:"numeric",month:"short"})}${S.baseline&&S.baseline.date===m.date?' <span style="color:#45C8DE;font-size:11px">day 0</span>':""}</td>
+        <td class="valn">${m.weight??"—"}</td><td class="valn">${m.waist??"—"}</td>
+        <td class="valn">${m.vert??"—"}</td><td class="valn">${m.app??"—"}</td>
+        <td class="valn">${m.broad??"—"}</td><td class="valn">${m.sleep??"—"}</td>
+        <td class="valn">${m.energy??"—"}</td>
         <td style="text-align:right"><button class="restbtn" data-del="${m.date}">Remove</button></td></tr>`).join("")+`</tbody></table>`;
     $("#mTable").querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{
       S.measures=S.measures.filter(x=>x.date!==b.dataset.del);
@@ -1309,10 +1345,17 @@ function renderMeasure(){
 /* ============================================================
    PROGRAM SCREEN
    ============================================================ */
+const WEEK_NOTES={
+  1:"Learn the movements and set your working weights. If it feels easy, that is correct.",
+  2:"Add load where week 1 felt light. The barbell squat enters with an empty bar for two sessions before you add anything.",
+  3:"The heaviest week. If technique slips or a joint aches, repeat week 2 instead of pushing on — nobody was ever set back by an extra week at the same load.",
+  4:"Volume drops, intent goes up. Long rests on jumps. Retest everything at the end of the week against your day 0 numbers."
+};
+
 function renderProgram(){
   const w=weekNo();
-  $("#progWeeks").innerHTML = [1,2,3,4].map(i=>{
-    const r=WEEK_RULES[i], open = i===w;
+  $("#progWeeks").innerHTML=[1,2,3,4].map(i=>{
+    const r=WEEK_RULES[i], open=(i===w);
     return `<div class="acc${open?" open":""}" data-acc="${i}">
       <button aria-expanded="${open}">
         <svg class="chev" viewBox="0 0 14 14"><path d="M5 2l5 5-5 5"/></svg>
@@ -1322,18 +1365,13 @@ function renderProgram(){
       </button>
       <div class="body">
         <table><tbody>
-          <tr><td class="mut">Main lifts</td><td style="text-align:right;font-weight:600">${r.main.sets} × ${r.main.reps}</td></tr>
-          <tr><td class="mut">Accessories</td><td style="text-align:right;font-weight:600">${r.acc.sets} sets</td></tr>
-          <tr><td class="mut">Effort</td><td style="text-align:right">${esc(r.rpe)}</td></tr>
-          <tr><td class="mut">Jump contacts per session</td><td style="text-align:right;font-weight:600">about ${r.contacts}</td></tr>
-          <tr><td class="mut">What changes</td><td style="text-align:right">${esc(r.note)}</td></tr>
+          <tr><td class="mut">Main lifts</td><td class="val">${r.main.sets} × ${r.main.reps}</td></tr>
+          <tr><td class="mut">Accessories</td><td class="val">${r.acc.sets} sets</td></tr>
+          <tr><td class="mut">Effort</td><td class="valn">${esc(r.rpe)}</td></tr>
+          <tr><td class="mut">Jump contacts per session</td><td class="val">about ${r.contacts}</td></tr>
+          <tr><td class="mut">What changes</td><td class="valn">${esc(r.note)}</td></tr>
         </tbody></table>
-        <div class="dd" style="font-size:13px;color:var(--muted);margin-top:12px;line-height:1.6">
-          ${i===1?"Learn the movements and set your working weights. If it feels easy, that is correct.":""}
-          ${i===2?"Add load where week 1 felt light. The barbell squat enters with an empty bar for two sessions before you add anything.":""}
-          ${i===3?"The heaviest week. If technique slips or a joint aches, repeat week 2 instead of pushing on — nobody was ever set back by an extra week at the same load.":""}
-          ${i===4?"Volume drops, intent goes up. Long rests on jumps. Retest everything at the end of the week against your day 0 numbers.":""}
-        </div>
+        <p class="accnote">${esc(WEEK_NOTES[i])}</p>
       </div></div>`;
   }).join("");
   $("#progWeeks").querySelectorAll(".acc>button").forEach(b=>b.onclick=()=>{
@@ -1341,16 +1379,16 @@ function renderProgram(){
   });
 
   $("#jumpTable").innerHTML=`<table><thead><tr><th>Week</th><th>Sessions</th><th style="text-align:right">Contacts</th><th>Work</th><th style="text-align:right">Rest between sets</th></tr></thead><tbody>
-    <tr><td>1</td><td class="mut">Mon, Wed</td><td style="text-align:right">~40</td><td class="mut">Snap-downs, pogos, countermovement jumps</td><td style="text-align:right">45–90 s</td></tr>
-    <tr><td>2</td><td class="mut">Mon, Wed, Sat</td><td style="text-align:right">~55</td><td class="mut">Add approach jumps and lateral hop-to-stick</td><td style="text-align:right">60–90 s</td></tr>
-    <tr><td>3</td><td class="mut">Mon, Wed, Sat</td><td style="text-align:right">~65</td><td class="mut">Add repeat jumps, three back to back</td><td style="text-align:right">90 s</td></tr>
-    <tr><td>4</td><td class="mut">Mon, Wed</td><td style="text-align:right">~40</td><td class="mut">Max-effort jumps only, then retest</td><td style="text-align:right">2 min</td></tr>
+    <tr><td class="valn" style="text-align:left">1</td><td class="mut">Mon, Wed</td><td class="val">~40</td><td class="mut">Snap-downs, pogos, countermovement jumps</td><td class="valn">45–90 s</td></tr>
+    <tr><td class="valn" style="text-align:left">2</td><td class="mut">Mon, Wed, Sat</td><td class="val">~55</td><td class="mut">Add approach jumps and lateral hop-to-stick</td><td class="valn">60–90 s</td></tr>
+    <tr><td class="valn" style="text-align:left">3</td><td class="mut">Mon, Wed, Sat</td><td class="val">~65</td><td class="mut">Add repeat jumps, three back to back</td><td class="valn">90 s</td></tr>
+    <tr><td class="valn" style="text-align:left">4</td><td class="mut">Mon, Wed</td><td class="val">~40</td><td class="mut">Max-effort jumps only, then retest</td><td class="valn">2 min</td></tr>
   </tbody></table>
-  <div class="callout" style="border-left-color:var(--cool);background:rgba(69,200,222,.06)">
-    <b style="color:var(--cool)">Landing comes before jumping.</b> Four checks on every landing: it is quiet, the knees stay out over the toes, you bend at ankle then knee then hip, and you can hold the position for two seconds. If a landing in a set fails any of these, the set is over. No box jumps or depth jumps in this block — you have no plyo box, and at your bodyweight the risk-to-reward is poor.
+  <div class="callout cool">
+    <b>Landing comes before jumping.</b> Four checks on every landing: it is quiet, the knees stay out over the toes, you bend at ankle then knee then hip, and you can hold the position for two seconds. If a landing in a set fails any of these, the set is over. No box jumps or depth jumps in this block — you have no plyo box, and at your bodyweight the risk-to-reward is poor.
   </div>`;
 
-  $("#drillList").innerHTML = DRILLS.map(g=>`<div class="panel" style="margin-bottom:12px">
+  $("#drillList").innerHTML=DRILLS.map(g=>`<div class="panel" style="margin-bottom:12px">
     <h3>${esc(g.g)}</h3>
     ${g.items.map(d=>`<div class="drill"><div class="dn">${esc(d.n)}</div><div class="dp num">${esc(d.p)}</div><div class="dd">${esc(d.d)}</div></div>`).join("")}
   </div>`).join("");
@@ -1382,7 +1420,8 @@ $("#importBtn").onclick=()=>$("#importFile").click();
 $("#importFile").onchange=e=>{
   const f=e.target.files[0]; if(!f) return;
   const r=new FileReader();
-  r.onload=()=>{ try{ const d=JSON.parse(r.result); if(!d||typeof d!=="object") throw 0;
+  r.onload=()=>{ try{
+    const d=JSON.parse(r.result); if(!d||typeof d!=="object") throw new Error("bad");
     S=Object.assign({name:"",startDate:todayKey(),height:183,reach:null,baseline:null,measures:[],sessions:{},ui:{tab:"overview",day:null}},d);
     persist(); boot(true); toast("Data imported");
   }catch(err){ toast("That file could not be read"); } };
